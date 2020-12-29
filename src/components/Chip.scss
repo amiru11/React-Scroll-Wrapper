@@ -1,0 +1,38 @@
+.chip {
+  &__container {
+    display: flex;
+    padding: 0 10px;
+    position: relative;
+  
+    button {
+      border-radius: 20px;
+      border: 0;
+      color: #000000;
+      cursor: pointer;
+      display: flex;
+      font-size: 14px;
+      justify-content: center;
+      align-items: center;
+      padding: 9px 20px;
+      line-height: 12px;
+      
+      span {
+        line-height: 1;
+        img {
+          width: 16px;
+        }
+      }
+
+      &:hover {
+        background-color: #666666;
+      }
+  
+      &.on {
+        /* font-weight: 600; */
+        background-color: #cccccc;
+        border: solid 1px #cccccc;
+        color: #333333;
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+.arrow {
+  &__container {
+    background: linear-gradient(to left, rgba(255, 255, 255, 0) 2%, #ffffff 49%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 58px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 2;
+
+    &.next {
+      background: linear-gradient(to right, rgba(255, 255, 255, 0) 2%, #ffffff 49%);
+      right: 0;
+      left: initial;
+      justify-content: flex-end;
+    }
+  }
+
+  &__button {
+    background-color: #ffffff;
+    border: solid 1px #d9d9d9;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+
+    &:active {
+      background-color: #e0e0e0;
+    }
+  }
+}
