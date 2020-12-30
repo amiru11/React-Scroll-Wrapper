@@ -7,8 +7,9 @@ const { createRef } = React;
 
 type TScorllWrapperState = {
   isMouseDown: boolean;
-  slideIndex: number;
-  totalIndex: number;
+  scrollLeft: number;
+  clientWidth: number;
+  scrollWidth: number;
 };
 
 class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
@@ -25,8 +26,9 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
 
     this.state = {
       isMouseDown: false,
-      slideIndex: 0,
-      totalIndex: 0
+      scrollLeft: 0,
+      clientWidth: 0,
+      scrollWidth: 0
     };
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -38,7 +40,7 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
   }
 
   componentDidMount() {
-    this.calcurateTotalIndex();
+    this.setScrollState();
     if (this.wrapperRef.current) {
       this.wrapperRef.current.addEventListener("scroll", this.handleScroll);
     }
@@ -73,81 +75,43 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
   }
   handleScroll(event: any) {
     if (this.wrapperRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = this.wrapperRef.current;
-      const { slideIndex, totalIndex } = this.state;
-      // console.log("scrollWidth", scrollWidth);
-      // console.log("clientWidth", clientWidth);
-      // console.log("scrollEnd", scrollWidth - scrollLeft === clientWidth);
-
-      // startOfScroll
-      if (scrollLeft === 0) {
-        this.setState((state) => ({
-          ...state,
-          slideIndex: 0
-        }));
-      }
-
-      // middleOfScroll
-      if (scrollLeft > 0 && slideIndex * clientWidth < scrollLeft) {
-        console.log(
-          "(slideIndex + 1) * clientWidth",
-          (slideIndex + 1) * clientWidth
-        );
-        console.log("scrollLeft", scrollLeft);
-        if (
-          (slideIndex + 1) * clientWidth >= scrollLeft &&
-          slideIndex < totalIndex
-        ) {
-          this.setState((state) => ({ ...state, slideIndex: slideIndex + 1 }));
-        }
-      }
-
-      // endOfScroll
-      if (scrollWidth - scrollLeft === clientWidth) {
-        this.setState((state) => ({
-          ...state,
-          slideIndex: this.state.totalIndex
-        }));
-      }
+      const { scrollLeft } = this.wrapperRef.current;
+      this.setState((state) => ({
+        ...state,
+        scrollLeft
+      }));
     }
   }
 
-  calcurateTotalIndex(): void {
+  setScrollState(): void {
     if (this.wrapperRef.current) {
       const { scrollWidth, clientWidth } = this.wrapperRef.current;
-      if (clientWidth < scrollWidth) {
-        const totalIndex = Math.floor(scrollWidth / clientWidth);
-        console.log("totalIndex", totalIndex);
-        this.setState((state) => ({ ...state, totalIndex }));
-      }
+      console.log(scrollWidth, clientWidth);
+      this.setState((state) => ({ ...state, scrollWidth, clientWidth }));
     }
   }
 
   handleChangeIndex(isNext: boolean): void {
     if (this.wrapperRef.current) {
       const { scrollLeft, clientWidth } = this.wrapperRef.current;
-      let { slideIndex } = this.state;
       let wrapperScroll = scrollLeft - clientWidth;
-      slideIndex -= 1;
       if (isNext) {
         wrapperScroll = scrollLeft + clientWidth;
-        slideIndex += 1;
       }
 
       this.wrapperRef.current.scrollTo({
         left: wrapperScroll,
         behavior: "smooth"
       });
-      this.setState((state) => ({ ...state, slideIndex }));
+      this.setState((state) => ({ ...state }));
     }
   }
 
   render() {
-    const { slideIndex, totalIndex } = this.state;
-    // console.log("totalIndex", totalIndex);
+    const { scrollLeft, scrollWidth, clientWidth } = this.state;
     return (
       <div className="scroll-container">
-        {slideIndex < totalIndex && totalIndex > 0 && slideIndex > 0 && (
+        {scrollLeft > 0 && (
           <Arrow
             isNext={false}
             value={0}
@@ -172,7 +136,7 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
             <Chip title={"123456789101113"} value={"123456789101113"} />
           </div>
         </div>
-        {slideIndex !== totalIndex && totalIndex > 0 && (
+        {scrollWidth - scrollLeft > clientWidth && (
           <Arrow
             isNext={true}
             value={0}
