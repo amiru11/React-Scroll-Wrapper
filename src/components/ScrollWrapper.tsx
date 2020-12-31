@@ -1,9 +1,13 @@
 import React, { PureComponent } from "react";
+import classnames from 'classnames';
 
-import Chip from "./components/Chip";
-import Arrow from "./components/Arrow";
+import styles from './ScrollWrapper.scss';
+
+import Chip from "./Chip";
+import Arrow from "./Arrow";
 
 const { createRef } = React;
+const cx = classnames.bind(styles);
 
 type TScorllWrapperState = {
   isMouseDown: boolean;
@@ -35,7 +39,7 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
-    this.handleChangeIndex = this.handleChangeIndex.bind(this);
+    this.handleClickPagination = this.handleClickPagination.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
 
@@ -46,20 +50,20 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
     }
   }
 
-  handleMouseDown(event: React.MouseEvent<HTMLDivElement>) {
+  handleMouseDown(event: React.MouseEvent<HTMLDivElement>): void {
     if (this.wrapperRef.current) {
       this.startX = event.pageX - this.wrapperRef.current.offsetLeft;
       this.scrollLeft = this.wrapperRef.current.scrollLeft;
       this.setState({ ...this.state, isMouseDown: true });
     }
   }
-  handleMouseLeave() {
+  handleMouseLeave(): void {
     this.setState({ ...this.state, isMouseDown: false });
   }
-  handleMouseUp() {
+  handleMouseUp(): void {
     this.setState({ ...this.state, isMouseDown: false });
   }
-  handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+  handleMouseMove(event: React.MouseEvent<HTMLDivElement>): void {
     const { isMouseDown } = this.state;
     if (!isMouseDown) return;
     event.preventDefault();
@@ -73,7 +77,7 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
       });
     }
   }
-  handleScroll(event: any) {
+  handleScroll(): void {
     if (this.wrapperRef.current) {
       const { scrollLeft } = this.wrapperRef.current;
       this.setState((state) => ({
@@ -91,7 +95,7 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
     }
   }
 
-  handleChangeIndex(isNext: boolean): void {
+  handleClickPagination(isNext: boolean): void {
     if (this.wrapperRef.current) {
       const { scrollLeft, clientWidth } = this.wrapperRef.current;
       let wrapperScroll = scrollLeft - clientWidth;
@@ -103,30 +107,29 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
         left: wrapperScroll,
         behavior: "smooth"
       });
-      this.setState((state) => ({ ...state }));
     }
   }
 
   render() {
     const { scrollLeft, scrollWidth, clientWidth } = this.state;
     return (
-      <div className="scroll-container">
+      <div className={cx("scroll-container")}>
         {scrollLeft > 0 && (
           <Arrow
             isNext={false}
             value={0}
-            onClick={() => this.handleChangeIndex(false)}
+            onClick={() => this.handleClickPagination(false)}
           />
         )}
         <div
-          className="scroll-wrapper"
+          className={cx("scroll-wrapper")}
           ref={this.wrapperRef}
           onMouseDown={this.handleMouseDown}
           onMouseLeave={this.handleMouseLeave}
           onMouseUp={this.handleMouseUp}
           onMouseMove={this.handleMouseMove}
         >
-          <div className="scroll-content">
+          <div className={cx("scroll-content")}>
             <Chip title={"12345"} value={"12345"} />
             <Chip title={"1234567"} value={"1234567"} />
             <Chip title={"123456789"} value={"123456789"} />
@@ -134,13 +137,21 @@ class ScrollWrapper extends PureComponent<any, TScorllWrapperState> {
             <Chip title={"1234567891011"} value={"1234567891011"} />
             <Chip title={"123456789101112"} value={"123456789101112"} />
             <Chip title={"123456789101113"} value={"123456789101113"} />
+            <Chip title={"123456789101113"} value={"123456789101113"} />
+            <Chip title={"123456789101113"} value={"123456789101113"} />
+            <Chip title={"123456789101113"} value={"123456789101113"} />
+            <Chip title={"123456789101113"} value={"123456789101113"} />
+            <Chip title={"123456789101113"} value={"123456789101113"} />
+            <Chip title={"123456789101113"} value={"123456789101113"} />
+            <Chip title={"123456789101113"} value={"123456789101113"} />
+            <Chip title={"123456789101113"} value={"123456789101113"} />
           </div>
         </div>
-        {scrollWidth - scrollLeft > clientWidth && (
+        {scrollWidth - scrollLeft - 1 > clientWidth && (
           <Arrow
             isNext={true}
             value={0}
-            onClick={() => this.handleChangeIndex(true)}
+            onClick={() => this.handleClickPagination(true)}
           />
         )}
       </div>

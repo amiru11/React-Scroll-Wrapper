@@ -1,2 +1,12 @@
 # React-Scroll-Wrapper
-Created with CodeSandbox
+---
+Create Dragable Scroll Wrapper Element without any library.
+
+1. Use Class Component
+2. Use ScrollEvent
+3. Use Typescript
+
+
+## TODO
+- [ ] RTL
+- [ ] Optimize Component

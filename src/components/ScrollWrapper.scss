@@ -1,0 +1,22 @@
+
+.scroll-container {
+  position: relative;
+}
+
+.scroll-wrapper {
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.scroll-content {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: stretch;
+  padding: 16px 0;
+}
